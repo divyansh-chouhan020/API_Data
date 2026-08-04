@@ -1,15 +1,19 @@
+package com.dlancers.api_data.presentation.state
+
+import Product // FIX: use your API Product model (not Google Analytics Product)
+
 // There are 3 states that are possible
 //1. Success  2. Failure and 3. Loading
 // Since we have only three states and these changes are dynamic like List<Product> on success or String messages on the error
-// lets use the sealed clases
+// lets use the sealed class
 sealed class ProductState{
     // if it is a Loading state
-    data object Loading :ProductState();
+    data object Loading :ProductState()
 
     // On Success State
     data class Success (
         val products : List<Product>
-    ):ProductState();
+    ):ProductState()
 
     //on Failure State
     data class Failure (

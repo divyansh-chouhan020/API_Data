@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import ProductState
+import com.dlancers.api_data.presentation.state.ProductState // FIX: full package import for ProductState
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val productRepository: ProductRepository

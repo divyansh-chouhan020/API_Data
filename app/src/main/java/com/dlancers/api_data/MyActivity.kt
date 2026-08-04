@@ -1,6 +1,6 @@
 package com.dlancers.api_data
 import com.dlancers.api_data.presentation.viewmodel.ProductViewModel
-import ProductScreen
+import com.dlancers.api_data.presentation.screen.ProductScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,9 +15,7 @@ class MyActivity: ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             val productViewModel: ProductViewModel =hiltViewModel()
-
             ProductScreen(
                 viewModel =productViewModel
             )
@@ -26,3 +24,4 @@ class MyActivity: ComponentActivity() {
     }
 
 
+// --> Build Flavours
