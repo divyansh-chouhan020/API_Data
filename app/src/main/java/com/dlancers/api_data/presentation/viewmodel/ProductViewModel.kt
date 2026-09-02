@@ -3,16 +3,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dlancers.api_data.domain.repository.ProductRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.dlancers.api_data.presentation.state.ProductState // FIX: full package import for ProductState
+import com.dlancers.api_data.presentation.state.ProductState
+import com.dlancers.api_data.domain.repository.ProductRepository
+import kotlinx.coroutines.delay
+
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val productRepository: ProductRepository
 ): ViewModel(){
+
+    // Minimal Loading time
+    val minimumLoadingTime = 1000L
 
     private val _productState = MutableStateFlow<ProductState> ( ProductState.Loading)
 
@@ -28,11 +33,33 @@ class ProductViewModel @Inject constructor(
     private fun getProducts()
     {
         viewModelScope.launch{
+
+            val loadingStartTime = System.currentTimeMillis()
+
             try {
                       val products = productRepository.getProducts()
+
+                      val timeElapsed = System.currentTimeMillis() - loadingStartTime
+
+                      val remainingTime = minimumLoadingTime - timeElapsed
+
+                       if (remainingTime>0)
+                       {
+                           delay(remainingTime)
+                       }
+
                      _productState.value = ProductState.Success( products );
 
             }catch ( exception : Exception){
+
+                     val timeElapsed = System.currentTimeMillis() - loadingStartTime
+
+                      val remainingTime = minimumLoadingTime - timeElapsed
+
+                        if (remainingTime >0)
+                        {
+                            delay(remainingTime)
+                        }
 
                        _productState.value = ProductState.Failure( exception.message ?: "Unexpected Error");
 
@@ -40,3 +67,4 @@ class ProductViewModel @Inject constructor(
         }
     }
 }
+
