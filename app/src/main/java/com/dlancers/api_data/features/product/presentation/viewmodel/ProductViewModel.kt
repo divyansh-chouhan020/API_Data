@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.dlancers.api_data.features.product.presentation.state.ProductState
-import com.dlancers.api_data.features.product.domain.repository.ProductRepository
+import com.dlancers.api_data.features.product.domain.usecase.GetProductsUseCase
 import kotlinx.coroutines.delay
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val productRepository: ProductRepository
+    private val getProductsUseCase: GetProductsUseCase,
 ): ViewModel(){
 
     // Minimal Loading time
@@ -37,7 +37,7 @@ class ProductViewModel @Inject constructor(
             val loadingStartTime = System.currentTimeMillis()
 
             try {
-                      val products = productRepository.getProducts()
+                      val products = getProductsUseCase()
 
                       val timeElapsed = System.currentTimeMillis() - loadingStartTime
 

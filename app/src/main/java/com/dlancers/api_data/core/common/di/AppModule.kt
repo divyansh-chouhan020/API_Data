@@ -5,6 +5,7 @@ import com.dlancers.api_data.features.product.data.remote.EscuelaProductApi
 import com.dlancers.api_data.features.product.data.remote.FakeStoreProductApi
 import com.dlancers.api_data.features.product.data.repository.ProductRepositoryImpl
 import com.dlancers.api_data.features.product.domain.repository.ProductRepository
+import com.dlancers.api_data.features.product.domain.usecase.GetProductsUseCase
 import com.dlancers.api_data.features.location.data.datasource.AndroidLocationDataSource
 import com.dlancers.api_data.features.location.data.datasource.LocationDataSource
 import com.dlancers.api_data.features.location.data.repository.LocationRepositoryImpl
@@ -100,6 +101,13 @@ object AppModule {
             productApi = productApi ,
             fakeStoreProductApi = fakeStoreProductApi
         )
+    }
+
+    @Provides
+    fun provideGetProductsUseCase(
+        productRepository: ProductRepository,
+    ): GetProductsUseCase {
+        return GetProductsUseCase(productRepository)
     }
 
     @Provides
