@@ -15,6 +15,7 @@ val localProperties = Properties().apply {
     }
 }
 
+// Read Maps key locally; empty default lets the manifest placeholder resolve without hardcoding a secret.
 val mapsApiKey: String = localProperties.getProperty("MAPS_API_KEY", "")
 
 android {
@@ -45,30 +46,25 @@ android {
 
     flavorDimensions += "env"
     productFlavors {
-        create ("dev") {
+        create("dev") {
             dimension = "env"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
             buildConfigField("String", "BASE_URL", "\"https://api.escuelajs.co/api/v1/\"")
-
             buildConfigField("String", "FAKESTORE_BASE_URL", "\"https://fakestoreapi.com/\"")
         }
 
-        create ("qa") {
+        create("qa") {
             dimension = "env"
             applicationIdSuffix = ".qa"
-            versionNameSuffix ="-qa"
-            // FIX: qa.api.escuelajs.co does not exist (DNS fails); use the live API for QA builds
+            versionNameSuffix = "-qa"
             buildConfigField("String", "BASE_URL", "\"https://api.escuelajs.co/api/v1/\"")
-
             buildConfigField("String", "FAKESTORE_BASE_URL", "\"https://fakestoreapi.com/\"")
-
         }
 
-        create ("prod") {
+        create("prod") {
             dimension = "env"
             buildConfigField("String", "BASE_URL", "\"https://api.escuelajs.co/api/v1/\"")
-
             buildConfigField("String", "FAKESTORE_BASE_URL", "\"https://fakestoreapi.com/\"")
         }
     }
@@ -91,6 +87,7 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    // FIX: required for StateFlow.collectAsState() in Compose screens
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.7")
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -98,6 +95,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    // FIX: material icons (e.g. FavoriteBorder) used in ProductComponents
     implementation("androidx.compose.material:material-icons-extended")
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -108,9 +106,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-
-
     implementation(libs.kotlinx.coroutines.android)
+
     // Adding the Coil for image fetching
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
@@ -131,8 +128,5 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     // OkHttp Logging Interceptor
-    // OkHttp Logging Interceptor
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
-
 }
