@@ -18,12 +18,12 @@ import com.dlancers.api_data.features.product.presentation.viewmodel.ProductView
 import com.dlancers.api_data.features.product.presentation.components.ProductCard
 import com.dlancers.api_data.features.product.presentation.state.ProductState
 
-
 @Composable
 fun ProductScreen(
     viewModel: ProductViewModel
 ) {
     val state by viewModel.productState.collectAsStateWithLifecycle()
+    val favouriteUids by viewModel.favouriteUids.collectAsStateWithLifecycle()
 
     when (val currentState = state) {
 
@@ -55,8 +55,12 @@ fun ProductScreen(
                 ) {
                     product -> ProductCard(
                         product = product,
-                        onFavouriteClick = {}
+                        isFavourite = product.uid in favouriteUids,
+                        onFavouriteClick = {
+                            viewModel.toggleFavourite(product.uid)
+                        }
                     )
+
                 }
             }
 

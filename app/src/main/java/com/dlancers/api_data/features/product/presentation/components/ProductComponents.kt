@@ -1,5 +1,6 @@
 package com.dlancers.api_data.features.product.presentation.components
 import com.dlancers.api_data.features.product.domain.models.Product
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,9 +33,9 @@ import coil3.compose.AsyncImage
 @Composable
 fun ProductCard(
     product: Product,
-    modifier: Modifier = Modifier,
-    onFavouriteClick: () -> Unit = {}
-) {
+    isFavourite: Boolean,
+    onFavouriteClick: () -> Unit
+){
 
     Column(
         modifier = Modifier
@@ -71,8 +72,16 @@ fun ProductCard(
                         .padding(4.dp),
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.FavoriteBorder,
-                        contentDescription = "Add to Wishlist",
+                        imageVector = if (isFavourite) {
+                            Icons.Filled.Favorite
+                        } else {
+                            Icons.Outlined.FavoriteBorder
+                        },
+                        contentDescription = if (isFavourite) {
+                            "Remove from Wishlist"
+                        } else {
+                            "Add to Wishlist"
+                        },
                         tint = Color.DarkGray,
                         modifier = Modifier.size(20.dp)
                     )

@@ -1,4 +1,5 @@
 package com.dlancers.api_data.features.product.presentation.viewmodel
+import com.dlancers.api_data.features.product.domain.usecase.ToggleFavouriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.ViewModel
@@ -10,12 +11,31 @@ import kotlinx.coroutines.flow.asStateFlow
 import com.dlancers.api_data.features.product.presentation.state.ProductState
 import com.dlancers.api_data.features.product.domain.usecase.GetProductsUseCase
 import kotlinx.coroutines.delay
+import com.dlancers.api_data.features.product.domain.usecase.ObserveFavouriteUseCase
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
+
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
+    private val toggleFavouriteUseCase: ToggleFavouriteUseCase,
+    private val observeFavouriteUseCase: ObserveFavouriteUseCase
+
 ): ViewModel(){
 
+    fun toggleFavourite(uid: String) {
+        viewModelScope.launch {
+            toggleFavouriteUseCase(uid)
+        }
+    }
+
+    val favouriteUids = observeFavouriteUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = emptySet()
+        )
     // Minimal Loading time
     val minimumLoadingTime = 1000L
 

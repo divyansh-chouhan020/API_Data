@@ -18,6 +18,11 @@ import com.dlancers.api_data.features.notification.domain.repository.Notificatio
 import com.dlancers.api_data.features.notification.domain.usecase.ShowDemoNotificationUseCase
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.dlancers.api_data.core.database.AppDatabase
+import com.dlancers.api_data.features.product.data.local.dao.FavouriteDao
+import com.dlancers.api_data.features.product.data.repository.FavouriteRepositoryImpl
+import com.dlancers.api_data.features.product.domain.repository.FavouriteRepository
+import androidx.room.Room
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.Module
@@ -166,6 +171,34 @@ object AppModule {
         notificationRepository: NotificationRepository,
     ): ShowDemoNotificationUseCase {
         return ShowDemoNotificationUseCase(notificationRepository)
+    }
+
+    // Adding room Database Singleton
+    @Provides
+    @Singleton
+    fun provideAppDatabase(
+        @ApplicationContext context: Context
+    ): AppDatabase {
+        return Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "api_data_database"
+        ).build()
+    }
+
+    @Provides
+    fun provideFavouriteDao(
+        database: AppDatabase
+    ): FavouriteDao {
+        return database.favouriteDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavouriteRepository(
+        favouriteRepositoryImpl: FavouriteRepositoryImpl
+    ): FavouriteRepository {
+        return favouriteRepositoryImpl
     }
 }
 // For fetching the API data

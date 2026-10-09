@@ -129,4 +129,9 @@ dependencies {
 
     // OkHttp Logging Interceptor
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // For Room Database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 }
